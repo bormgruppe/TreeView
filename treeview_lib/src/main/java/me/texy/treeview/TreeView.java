@@ -33,6 +33,10 @@ import me.texy.treeview.helper.TreeHelper;
  */
 
 public class TreeView implements SelectableTreeAction {
+    public interface OnNodeClickEventListener {
+        void onNodeClick(TreeNode node);
+    }
+
     private TreeNode root;
 
     private Context context;
@@ -44,6 +48,8 @@ public class TreeView implements SelectableTreeAction {
     private TreeViewAdapter adapter;
 
     private boolean itemSelectable = true;
+
+    private OnNodeClickEventListener onNodeClickEventListener;
 
     public void setItemAnimator(RecyclerView.ItemAnimator itemAnimator) {
         this.itemAnimator = itemAnimator;
@@ -208,4 +214,17 @@ public class TreeView implements SelectableTreeAction {
         this.itemSelectable = itemSelectable;
     }
 
+    public void setOnNodeClickEventListener(OnNodeClickEventListener listener) {
+        this.onNodeClickEventListener = listener;
+    }
+
+    public void removeOnNodeClickEventListener() {
+        this.onNodeClickEventListener = null;
+    }
+
+    public void triggerOnNodeClickEvent(TreeNode node) {
+        if (onNodeClickEventListener != null) {
+            onNodeClickEventListener.onNodeClick(node);
+        }
+    }
 }

@@ -119,6 +119,7 @@ public class TreeViewAdapter extends RecyclerView.Adapter {
                 triggerToggleView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        treeView.triggerOnNodeClickEvent(treeNode);
                         onNodeToggled(treeNode);
                         viewBinder.onNodeToggled(treeNode, treeNode.isExpanded());
                     }
@@ -128,6 +129,7 @@ public class TreeViewAdapter extends RecyclerView.Adapter {
             nodeView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    treeView.triggerOnNodeClickEvent(treeNode);
                     onNodeToggled(treeNode);
                     viewBinder.onNodeToggled(treeNode, treeNode.isExpanded());
                 }
