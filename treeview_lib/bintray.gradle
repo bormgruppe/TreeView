@@ -3,9 +3,9 @@ apply plugin: 'com.jfrog.bintray'
 // This is the library version used when deploying the artifact
 version = "1.0.3"
 
-def siteUrl = 'https://github.com/shinem/TreeView'    // 项目的主页
-def gitUrl = 'https://github.com/shinem/TreeView.git'   // Git仓库的url
-group = "me.texy.treeview"                                        // Maven Group ID for the artifact，一般填你唯一的包名
+def siteUrl = 'https://github.com/shinem/TreeView'
+def gitUrl = 'https://github.com/shinem/TreeView.git'
+group = "me.texy.treeview"                                        // Maven Group ID for the artifact
 install {
     repositories.mavenInstaller {
         // This generates POM.xml with proper parameters
@@ -24,7 +24,7 @@ install {
                 }
                 developers {
                     developer {
-                        id 'shinem'        //填写的一些基本信息
+                        id 'shinem'        // basic information
                         name 'shinem'
                         email 'zhongxinyuann@gmail.com'
                     }
@@ -63,14 +63,14 @@ bintray {
     configurations = ['archives']
     pkg {
         repo = "maven"
-        name = "TreeView"    //发布到JCenter上的项目名字
+        name = "TreeView"    // name that will be published in JCenter
         websiteUrl = siteUrl
         vcsUrl = gitUrl
         licenses = ["Apache-2.0"]
         publish = true
     }
 }
-javadoc { //jav doc采用utf-8编码否则会报“GBK的不可映射字符”错误
+javadoc {
     options {
         encoding "UTF-8"
         charSet 'UTF-8'
