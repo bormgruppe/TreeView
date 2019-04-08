@@ -47,9 +47,13 @@ public class TreeView implements SelectableTreeAction {
 
     private TreeViewAdapter adapter;
 
+    private RecyclerView.LayoutManager manager;
+
     private boolean itemSelectable = true;
 
     private OnNodeClickEventListener onNodeClickEventListener;
+
+    private boolean scrollToBottomOfExtended;
 
     public void setItemAnimator(RecyclerView.ItemAnimator itemAnimator) {
         this.itemAnimator = itemAnimator;
@@ -69,6 +73,11 @@ public class TreeView implements SelectableTreeAction {
         }
     }
 
+    public TreeView(@NonNull TreeNode root, @NonNull Context context, @NonNull BaseNodeViewFactory baseNodeViewFactory, boolean scrollToBottomOfExtended) {
+        this(root, context, baseNodeViewFactory);
+        this.scrollToBottomOfExtended = scrollToBottomOfExtended;
+    }
+
     public View getView() {
         if (rootView == null) {
             this.rootView = buildRootView();
@@ -79,7 +88,7 @@ public class TreeView implements SelectableTreeAction {
 
     @NonNull
     private RecyclerView buildRootView() {
-        RecyclerView recyclerView = new RecyclerView(context);
+        final RecyclerView recyclerView = new RecyclerView(context);
         /**
          * disable multi touch event to prevent terrible data set error when calculate list.
          */
@@ -89,10 +98,24 @@ public class TreeView implements SelectableTreeAction {
         SimpleItemAnimator itemAnimator = (SimpleItemAnimator) recyclerView.getItemAnimator();
         itemAnimator.setSupportsChangeAnimations(false);
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        manager = new LinearLayoutManager(context);
+        recyclerView.setLayoutManager(manager);
         adapter = new TreeViewAdapter(context, root, baseNodeViewFactory);
         adapter.setTreeView(this);
         recyclerView.setAdapter(adapter);
+
+        /**
+         * automatically scrolls to the last, freshly inserted node
+         */
+        if (this.scrollToBottomOfExtended) {
+            adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+                @Override
+                public void onItemRangeInserted(int positionStart, int itemCount) {
+                    manager.smoothScrollToPosition(recyclerView, null, positionStart + itemCount - 1);
+                }
+            });
+        }
+
         return recyclerView;
     }
 
