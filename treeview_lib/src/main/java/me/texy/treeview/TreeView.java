@@ -47,13 +47,13 @@ public class TreeView implements SelectableTreeAction {
 
     private TreeViewAdapter adapter;
 
-    private RecyclerView.LayoutManager manager;
+    private LinearLayoutManager manager;
 
     private boolean itemSelectable = true;
 
     private OnNodeClickEventListener onNodeClickEventListener;
 
-    private boolean scrollToBottomOfExtended;
+    private boolean scrollToExtended;
 
     public void setItemAnimator(RecyclerView.ItemAnimator itemAnimator) {
         this.itemAnimator = itemAnimator;
@@ -73,9 +73,9 @@ public class TreeView implements SelectableTreeAction {
         }
     }
 
-    public TreeView(@NonNull TreeNode root, @NonNull Context context, @NonNull BaseNodeViewFactory baseNodeViewFactory, boolean scrollToBottomOfExtended) {
+    public TreeView(@NonNull TreeNode root, @NonNull Context context, @NonNull BaseNodeViewFactory baseNodeViewFactory, boolean scrollToExtended) {
         this(root, context, baseNodeViewFactory);
-        this.scrollToBottomOfExtended = scrollToBottomOfExtended;
+        this.scrollToExtended = scrollToExtended;
     }
 
     public View getView() {
@@ -105,13 +105,13 @@ public class TreeView implements SelectableTreeAction {
         recyclerView.setAdapter(adapter);
 
         /**
-         * automatically scrolls to the last, freshly inserted node
+         * automatically scrolls to the node which was expanded
          */
-        if (this.scrollToBottomOfExtended) {
+        if (this.scrollToExtended) {
             adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
                 @Override
                 public void onItemRangeInserted(int positionStart, int itemCount) {
-                    manager.smoothScrollToPosition(recyclerView, null, positionStart + itemCount - 1);
+                    manager.scrollToPositionWithOffset(positionStart - 1, 0);
                 }
             });
         }
